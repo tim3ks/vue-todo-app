@@ -2,6 +2,11 @@ import { reactive, computed, ref } from "vue";
 
 const local = JSON.parse(localStorage.getItem("todos"));
 
+const storage = () => {
+  localStorage.setItem("todos", JSON.stringify(state.todos));
+  state.isStorage = true;
+};
+
 const checkStorage = () => {
   local
     ? (state.todos = local) && (state.isStorage = true)
@@ -54,4 +59,5 @@ export default {
   checkStorage: checkStorage,
   isDone: isDone,
   del: del,
+  storage: storage,
 };

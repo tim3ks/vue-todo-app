@@ -5,13 +5,16 @@ import btnAddTodo from "@/components/buttons/btnAddTodo.vue";
 import addTodoComponent from "@/components/addTodo.vue";
 import todosComponent from "@/components/todos.vue";
 
-const { state, newTodo, addTodo, checkStorage, isDone, del, cancelTodo } =
-  inject("store");
-
-const storage = () => {
-  localStorage.setItem("todos", JSON.stringify(state.todos));
-  state.isStorage = true;
-};
+const {
+  state,
+  newTodo,
+  addTodo,
+  checkStorage,
+  isDone,
+  del,
+  cancelTodo,
+  storage,
+} = inject("store");
 
 created: {
   checkStorage();
