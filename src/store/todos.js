@@ -1,6 +1,12 @@
-import { reactive, computed, ref } from "vue";
+import { reactive, watchEffect } from "vue";
 
 const local = JSON.parse(localStorage.getItem("todos"));
+
+const state = reactive({
+  todos: [],
+  isStorage: false,
+  isAddTodo: false,
+});
 
 const storage = () => {
   localStorage.setItem("todos", JSON.stringify(state.todos));
@@ -29,26 +35,24 @@ const addTodo = (e) => {
   state.isAddTodo = false;
 };
 
+watchEffect(async () => {
+  if (state.todos.length) {
+    await updateLocalStorage();
+  }
+});
+
 const isDone = async (i) => {
   state.todos[i].isDone = !state.todos[i].isDone;
-  await updateLocalStorage();
 };
 
 const del = async (i) => {
   state.todos.splice(i, 1);
-  await updateLocalStorage();
 };
 
 const updateLocalStorage = async () => {
   const todos = JSON.stringify(state.todos);
   state.isStorage ? localStorage.setItem("todos", todos) : null;
 };
-
-const state = reactive({
-  todos: [],
-  isStorage: false,
-  isAddTodo: false,
-});
 
 export default {
   state: state,

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, reactive, inject } from "vue";
+import { ref, onMounted, reactive, inject, watchEffect } from "vue";
 import useStorage from "@/components/inputs/useStorage.vue";
 import btnAddTodo from "@/components/buttons/btnAddTodo.vue";
 import addTodoComponent from "@/components/addTodo.vue";
