@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, reactive, inject, watchEffect } from "vue";
+import { inject } from "vue";
 import useStorage from "@/components/inputs/useStorage.vue";
 import btnAddTodo from "@/components/buttons/btnAddTodo.vue";
 import addTodoComponent from "@/components/addTodo.vue";
@@ -35,7 +35,7 @@ created: {
           </div>
           <div
             v-if="state.todos.length > 0"
-            class="flex flex-col p-6 border border-indigo-400 rounded"
+            class="flex flex-col p-6 border border-indigo-300 rounded"
           >
             <h1 class="text-2xl mb-10 text-center">Your daily Todos</h1>
             <todosComponent :todos="state.todos" @isDone="isDone" @del="del" />
