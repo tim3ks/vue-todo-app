@@ -9,5 +9,3 @@ const app = createApp(App);
 app.provide("store", store);
 
 app.mount("#app");
-
-// createApp(App).mount("#app");
