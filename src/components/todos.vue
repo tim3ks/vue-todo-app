@@ -23,7 +23,7 @@ const del = (index) => emit("del", index);
       >
         <span
           @click="isDone(index)"
-          class="text-white"
+          class="text-white w-full"
           :class="{
             'line-through decoration-red-500 decoration-4 px-3':
               props.todos[index].isDone,
