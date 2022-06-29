@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 
 const emit = defineEmits(["addTodo", "cancelTodo"]);
 
@@ -7,13 +7,15 @@ const addTodo = (e) => {
   emit("addTodo", e.target.value);
 };
 
+const todo = ref(null);
+
 const cancelTodo = () => {
   emit("cancelTodo");
 };
 
-// onMounted(() => {
-//   state.todo.value.focus();
-// });
+onMounted(() => {
+  todo.value.focus();
+});
 </script>
 
 <template>
