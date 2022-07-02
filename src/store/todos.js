@@ -1,4 +1,4 @@
-import { reactive, watchEffect } from "vue";
+import { reactive, watchEffect, ref } from "vue";
 
 const local = JSON.parse(localStorage.getItem("todos"));
 
@@ -9,8 +9,14 @@ const state = reactive({
 });
 
 const storage = () => {
-  localStorage.setItem("todos", JSON.stringify(state.todos));
-  state.isStorage = true;
+  const storage = localStorage.getItem("todos");
+  if (storage) {
+    localStorage.removeItem("todos");
+    state.isStorage = false;
+  } else {
+    localStorage.setItem("todos", JSON.stringify(state.todos));
+    state.isStorage = true;
+  }
 };
 
 const checkStorage = () => {
@@ -18,10 +24,6 @@ const checkStorage = () => {
     ? (state.todos = local) && (state.isStorage = true)
     : (state.todos = []);
 };
-
-const newTodo = () => (state.isAddTodo = true);
-
-const cancelTodo = () => (state.isAddTodo = false);
 
 const addTodo = (e) => {
   if (e.length == 0) return;
@@ -37,31 +39,24 @@ const addTodo = (e) => {
 
 watchEffect(async () => {
   if (state.todos.length) {
-    await updateLocalStorage();
+    const todos = JSON.stringify(state.todos);
+    localStorage.setItem("todos", todos);
   }
 });
 
-const isDone = async (i) => {
+const isDone = (i) => {
   state.todos[i].isDone = !state.todos[i].isDone;
 };
 
-const del = async (i) => {
+const del = (i) => {
   state.todos.splice(i, 1);
 };
-
-const updateLocalStorage = async () => {
-  const todos = JSON.stringify(state.todos);
-  state.isStorage ? localStorage.setItem("todos", todos) : null;
-};
-
 export default {
-  state: state,
+  state,
   local: local,
-  newTodo: newTodo,
-  cancelTodo: cancelTodo,
-  addTodo: addTodo,
-  checkStorage: checkStorage,
-  isDone: isDone,
-  del: del,
-  storage: storage,
+  addTodo,
+  checkStorage,
+  isDone,
+  del,
+  storage,
 };

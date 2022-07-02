@@ -1,20 +1,11 @@
 <script setup>
-import { inject } from "vue";
+import { inject, toRefs } from "vue";
 import useStorage from "@/components/inputs/useStorage.vue";
 import btnAddTodo from "@/components/buttons/btnAddTodo.vue";
 import addTodoComponent from "@/components/addTodo.vue";
 import todosComponent from "@/components/todos.vue";
 
-const {
-  state,
-  newTodo,
-  addTodo,
-  checkStorage,
-  isDone,
-  del,
-  cancelTodo,
-  storage,
-} = inject("store");
+const { state, addTodo, checkStorage, isDone, del, storage } = inject("store");
 
 created: {
   checkStorage();
@@ -25,29 +16,52 @@ created: {
   <div class="flex h-screen flex-col">
     <div class="mx-auto h-full w-2/3 flex-1 flex items-center p-4 text-lg">
       <div class="w-full">
-        <div v-if="!state.isAddTodo">
-          <div class="flex justify-between">
-            <btnAddTodo @newTodo="newTodo"> </btnAddTodo>
-            <div class="flex items-center gap-x-2" v-if="!state.isStorage">
-              <span class="text-sm">Use localStorage?: </span>
-              <useStorage @useStorage="storage" />
+        <Transition name="fade">
+          <addTodoComponent
+            v-if="state.isAddTodo"
+            @addTodo="addTodo"
+            @cancelTodo="state.isAddTodo = !state.isAddTodo"
+          />
+          <div v-else>
+            <div class="flex justify-between">
+              <btnAddTodo @newTodo="state.isAddTodo = !state.isAddTodo">
+              </btnAddTodo>
+              <div class="flex items-center gap-x-2">
+                <span class="text-sm"
+                  >{{
+                    state.isStorage
+                      ? "Remove localStorage!"
+                      : "Use localStorage?"
+                  }}
+                </span>
+                <!-- <input type="checkbox" v-model="isStorage" /> -->
+                <useStorage @useStorage="storage" :storage="state" />
+              </div>
+            </div>
+
+            <div
+              v-if="state.todos.length > 0"
+              class="flex flex-col p-6 border border-indigo-300 rounded"
+            >
+              <h1 class="text-2xl mb-10 text-center underline">
+                Your Daily Todos
+              </h1>
+              <todosComponent
+                :todos="state.todos"
+                @isDone="isDone"
+                @del="del"
+              />
+            </div>
+            <div
+              v-else
+              class="flex flex-col p-6 border border-indigo-400 rounded"
+            >
+              <h1 class="text-2xl mb-10 text-center">
+                Please Add some Todos :)
+              </h1>
             </div>
           </div>
-          <div
-            v-if="state.todos.length > 0"
-            class="flex flex-col p-6 border border-indigo-300 rounded"
-          >
-            <h1 class="text-2xl mb-10 text-center">Your daily Todos</h1>
-            <todosComponent :todos="state.todos" @isDone="isDone" @del="del" />
-          </div>
-          <div
-            v-else
-            class="flex flex-col p-6 border border-indigo-400 rounded"
-          >
-            <h1 class="text-2xl mb-10 text-center">Please Add some Todos :)</h1>
-          </div>
-        </div>
-        <addTodoComponent v-else @addTodo="addTodo" @cancelTodo="cancelTodo" />
+        </Transition>
       </div>
     </div>
   </div>
@@ -73,9 +87,34 @@ header {
 }
 
 a,
-.green {
+/* .green {
   text-decoration: none;
   color: hsla(160, 100%, 37%, 1);
   transition: 0.4s;
+} */
+
+.fade-enter-from {
+  /* position: absolute; */
+  opacity: 0;
+}
+.fade-enter-active {
+  transition: all 0.2s ease;
+}
+
+/* .fade-enter-to {
+  position: absolute;
+} */
+.fade-leave-from {
+  position: absolute;
+}
+
+.fade-leave-to {
+  position: absolute;
+  opacity: 0;
+}
+
+.fade-leave-active {
+  position: absolute;
+  transition: all 0.2s ease;
 }
 </style>

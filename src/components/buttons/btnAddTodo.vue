@@ -5,7 +5,7 @@ const emit = defineEmits(["newTodo"]);
 <template>
   <button
     @click="emit('newTodo')"
-    class="flex border px-2 py-1 text-xs rounded mb-1 hover:border-green-500 hover:text-green-400 items-center"
+    class="flex border px-2 py-1 text-xs rounded mb-1 hover:border-green-500 hover:text-green-400 items-center transition-all duration-300"
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"

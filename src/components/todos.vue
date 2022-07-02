@@ -6,9 +6,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["isDone", "del"]);
-
-const isDone = (index) => emit("isDone", index);
-const del = (index) => emit("del", index);
 </script>
 
 <template>
@@ -16,23 +13,24 @@ const del = (index) => emit("del", index);
     <ul
       v-for="(todo, index) in props.todos"
       :key="props.todos.index"
-      class="cursor-pointer justify-between"
+      class="cursor-pointer justify-between list-outside list-disc"
     >
       <li
-        class="flex justify-between py-1 px-3 hover:bg-slate-50 hover:bg-opacity-10 rounded"
+        class="flex justify-between py-1 px-3 hover:bg-slate-50 hover:bg-opacity-10 rounded transition-all duration-300"
       >
-        <span
-          @click="isDone(index)"
-          class="text-white w-full"
+        <div
+          @click="emit('isDone', index)"
+          class="text-white w-full duration-300 transition-all"
           :class="{
-            'line-through decoration-red-500 decoration-4 px-3':
+            'line-through decoration-red-500 decoration-4 px-3 ':
               props.todos[index].isDone,
           }"
-          >{{ todo.name }}</span
         >
+          {{ todo.name }}
+        </div>
         <button
-          @click="del(index)"
-          class="flex border px-2 rounded hover:border-red-500 hover:text-red-500 items-center text-xs"
+          @click="emit('del', index)"
+          class="flex border px-2 rounded hover:border-red-500 hover:text-red-500 items-center text-xs transition-all duration-300"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
